@@ -51,6 +51,22 @@ bool SetRegCryptedVsLicensesData(const std::shared_ptr<BYTE[]>& binData,
 	return ERROR_SUCCESS == resultState;
 }
 
+// https://www.cplusplus.com/forum/beginner/3067
+template<typename IntegerType>
+IntegerType bitsToInt(IntegerType& result, const BYTE* bits,
+	bool little_endian = true)
+{
+	result = 0;
+	if (little_endian)
+		for (int n = sizeof(result); n >= 0; n--)
+			result = (result << 8) + bits[n];
+	else
+		for (unsigned n = 0; n < sizeof(result); n++)
+			result = (result << 8) + bits[n];
+	return result;
+}
+
+// https://www.cplusplus.com/forum/beginner/155821
 using byte = unsigned char;
 template<typename T> std::array<byte, sizeof(T)> to_bytes(const T& object)
 {
@@ -90,6 +106,9 @@ bool DecodeLicensesExpirationDate(short& yyyy, short& mm, short& dd,
 
 	const BYTE* const pDat = _DataOut.pbData;
 	const int zDat = _DataOut.cbData;
+	//yyyy = bitsToInt<short>(yyyy, &pDat[zDat - 16], true);
+	//mm   = bitsToInt<short>(mm,   &pDat[zDat - 14], true);
+	//dd   = bitsToInt<short>(dd,   &pDat[zDat - 12], true);
 	yyyy = from_bytes<short>(ShortByte(pDat, zDat, 16, 15), yyyy);
 	mm = from_bytes<short>(ShortByte(pDat, zDat, 14, 13), mm);
 	dd = from_bytes<short>(ShortByte(pDat, zDat, 12, 11), dd);

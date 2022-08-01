@@ -51,7 +51,7 @@ bool SetRegCryptedVsLicensesData(const std::shared_ptr<BYTE[]>& binData,
 	return ERROR_SUCCESS == resultState;
 }
 
-// https://www.cplusplus.com/forum/beginner/3067
+// https://cplusplus.com/forum/beginner/20825/
 template<typename IntegerType>
 IntegerType bitsToInt(IntegerType& result, const BYTE* bits,
 	bool little_endian = true)
